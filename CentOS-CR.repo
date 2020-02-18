@@ -17,7 +17,7 @@
 [cr]
 name=CentOS-$releasever - cr
 mirrorlist=http://mirrorlist.centos.org/?release=$releasever&arch=$basearch&repo=cr&infra=$infra
-#baseurl=http://mirror.centos.org/$contentdir/$releasever/cr/$basearch/os/
+#baseurl=http://mirror.centos.org/centos/$releasever/cr/$basearch/os/
 gpgcheck=1
 enabled=0
 gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-centosofficial
