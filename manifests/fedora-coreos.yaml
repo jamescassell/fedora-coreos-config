@@ -7,43 +7,15 @@ include: fedora-coreos-base.yaml
 automatic-version-prefix: "${releasever}.<date:%Y%m%d>.dev"
 mutate-os-release: "${releasever}"
 
-packages:
-  - fedora-release-coreos
-  - fedora-repos-ostree
-  # CL ships this.
-  - moby-engine
-  # User metrics
-  - fedora-coreos-pinger
-  # Updates
-  - zincati
-
-etc-group-members:
-  # Add the docker group to /etc/group
-  # https://github.com/coreos/fedora-coreos-tracker/issues/2
-  # This will be no longer needed when systemd-sysusers has been implemented:
-  # https://github.com/projectatomic/rpm-ostree/issues/49
-  - docker
-
 # XXX: this is used by coreos-assembler for artifact naming...
 rojig:
   license: MIT
-  name: fedora-coreos
-  summary: Fedora CoreOS base image
+  name: centos-coreos
+  summary: CentOS CoreOS base image
 
 # ⚠⚠⚠ ONLY TEMPORARY HACKS ALLOWED HERE; ALL ENTRIES NEED TRACKER LINKS ⚠⚠⚠
 # See also the version of this in fedora-coreos-base.yaml
 postprocess:
-  # Disable Zincati and fedora-coreos-pinger on non-release builds
-  # https://github.com/coreos/fedora-coreos-tracker/issues/212
-  - |
-    #!/usr/bin/env bash
-    set -xeuo pipefail
-    source /etc/os-release
-    if [[ $OSTREE_VERSION = *.dev* ]]; then
-      mkdir -p /etc/fedora-coreos-pinger/config.d /etc/zincati/config.d
-      echo -e '# https://github.com/coreos/fedora-coreos-tracker/issues/212\nreporting.enabled = false' > /etc/fedora-coreos-pinger/config.d/95-disable-on-dev.toml
-      echo -e '# https://github.com/coreos/fedora-coreos-tracker/issues/212\nupdates.enabled = false' > /etc/zincati/config.d/95-disable-on-dev.toml
-    fi
   # Disable SSH password logins by default
   # Move to overlay once sshd_config fragments are supported
   # https://github.com/coreos/fedora-coreos-tracker/issues/138
@@ -52,22 +24,6 @@ postprocess:
     set -xeuo pipefail
     sed -Ei 's/^(PasswordAuthentication|PermitRootLogin)[[:blank:]]/#&/' /etc/ssh/sshd_config
     echo -e '\n# Disable password logins by default\nPasswordAuthentication no\nPermitRootLogin prohibit-password' >> /etc/ssh/sshd_config
-  # Users shouldn't be configuring `rpm-ostreed.conf`
-  # https://github.com/coreos/fedora-coreos-tracker/issues/271
-  - |
-    #!/usr/bin/env bash
-    set -xeuo pipefail
-    cat > /tmp/rpm-ostreed.conf << 'EOF'
-    # By default, this system has its OS updates managed by
-    # `zincati.service`.  Changes made to this file may
-    # conflict with the configuation of `zincati.service`.
-    # See https://github.com/coreos/zincati for additional
-    # information.
-
-    EOF
-    cat /usr/etc/rpm-ostreed.conf >> /tmp/rpm-ostreed.conf
-    cp /tmp/rpm-ostreed.conf /usr/etc/rpm-ostreed.conf
-    rm /tmp/rpm-ostreed.conf
 
 remove-from-packages:
   # Drop NetworkManager support for ifcfg files, see also corresponding

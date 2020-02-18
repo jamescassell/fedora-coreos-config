@@ -1,32 +1,19 @@
-ref: fedora/${basearch}/coreos/testing-devel
+ref: centos/${basearch}/coreos/testing-devel
 include: manifests/fedora-coreos.yaml
 
-releasever: "31"
+releasever: "8"
 
 rojig:
   license: MIT
-  name: fedora-coreos
-  summary: Fedora CoreOS testing-devel
+  name: centos-coreos
+  summary: CentOS CoreOS testing-devel
 
 repos:
-  - fedora-coreos-pool
-  # these repos are there to make it easier to add new packages to the OS and to
-  # use `cosa fetch --update-lockfile`; but note that all package versions are
-  # still pinned
-  - fedora
-  - fedora-updates
-  - fedora-modular
-  - fedora-updates-modular
+  - BaseOS
+  - AppStream
+  - PowerTools
+  - copr:copr.fedorainfracloud.org:cyberpear:openshift-4.3.1
+  - copr:copr.fedorainfracloud.org:cyberpear:ignition
 
-add-commit-metadata:
-  fedora-coreos.stream: testing-devel
-
-postprocess:
-  # Disable Zincati and fedora-coreos-pinger on non-production streams
-  # https://github.com/coreos/fedora-coreos-tracker/issues/163
-  - |
-    #!/usr/bin/env bash
-    set -xeuo pipefail
-    mkdir -p /etc/fedora-coreos-pinger/config.d /etc/zincati/config.d
-    echo -e '# https://github.com/coreos/fedora-coreos-tracker/issues/163\nreporting.enabled = false' > /etc/fedora-coreos-pinger/config.d/90-disable-on-non-production-stream.toml
-    echo -e '# https://github.com/coreos/fedora-coreos-tracker/issues/163\nupdates.enabled = false' > /etc/zincati/config.d/90-disable-on-non-production-stream.toml
+#add-commit-metadata:
+#  fedora-coreos.stream: testing-devel

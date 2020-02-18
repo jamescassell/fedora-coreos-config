@@ -1,0 +1,11 @@
+[copr:copr.fedorainfracloud.org:cyberpear:coreos]
+name=Copr repo for coreos owned by cyberpear
+baseurl=https://download.copr.fedorainfracloud.org/results/cyberpear/coreos/epel-8-$basearch/
+type=rpm-md
+skip_if_unavailable=True
+gpgcheck=1
+gpgkey=https://download.copr.fedorainfracloud.org/results/cyberpear/coreos/pubkey.gpg
+repo_gpgcheck=0
+enabled=1
+enabled_metadata=1
+

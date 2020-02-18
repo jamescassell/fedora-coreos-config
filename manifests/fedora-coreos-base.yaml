@@ -71,15 +71,6 @@ remove-files:
 # ⚠⚠⚠ ONLY TEMPORARY HACKS ALLOWED HERE; ALL ENTRIES NEED TRACKER LINKS ⚠⚠⚠
 # See also the version of this in fedora-coreos.yaml
 postprocess:
-  # This will be dropped once rpm-ostree because module-aware.
-  # https://github.com/projectatomic/rpm-ostree/issues/1542#issuecomment-419684977
-  # https://github.com/projectatomic/rpm-ostree/issues/1435
-  - |
-    #!/usr/bin/env bash
-    set -xeuo pipefail
-    for x in /etc/yum.repos.d/*modular.repo; do
-      sed -i -e 's,enabled=[01],enabled=0,' ${x}
-    done
   # Read the Ignition 2 and Afterburn SSH key fragments, pending better tooling
   # https://github.com/coreos/fedora-coreos-tracker/issues/139
   - |
@@ -102,7 +93,6 @@ packages:
   - polkit
   # System setup
   - afterburn
-  - afterburn-dracut
   - passwd
   # SSH
   - openssh-server openssh-clients
@@ -112,17 +102,16 @@ packages:
   # Remote IPC for podman
   - libvarlink-util
   # Networking
-  - nfs-utils-coreos
   - NetworkManager hostname
   - iproute-tc
   - adcli
   # Static firewalling
-  - iptables nftables iptables-nft iptables-services
+  - iptables nftables iptables-services
   # Storage
   - cloud-utils-growpart
   - lvm2 iscsi-initiator-utils sg3_utils
   - device-mapper-multipath
-  - xfsprogs e2fsprogs btrfs-progs mdadm
+  - xfsprogs e2fsprogs mdadm
   - cryptsetup
   - cifs-utils
   # Time sync
@@ -145,15 +134,16 @@ packages:
   # so we can't put it in file-transfer.yaml
   - fuse-sshfs
   # User experience
-  - console-login-helper-messages-issuegen
-  - console-login-helper-messages-motdgen
+  # removed because of hard dep on redhat-release-coreos
+  #- console-login-helper-messages-issuegen
   - console-login-helper-messages-profile
   - toolbox
   # CoreOS Installer
-  - coreos-installer coreos-installer-systemd
+  - coreos-installer
   # i18n
   - kbd
-  - whois-nls
+  # available in EPEL, skip for now
+  #- whois-nls
   # Parsing/Interacting with JSON data
   - jq
 

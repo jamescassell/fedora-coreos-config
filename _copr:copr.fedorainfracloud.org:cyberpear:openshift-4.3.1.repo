@@ -1,0 +1,11 @@
+[copr:copr.fedorainfracloud.org:cyberpear:openshift-4.3.1]
+name=Copr repo for openshift-4.3.1 owned by cyberpear
+baseurl=https://download.copr.fedorainfracloud.org/results/cyberpear/openshift-4.3.1/epel-8-$basearch/
+type=rpm-md
+skip_if_unavailable=True
+gpgcheck=1
+gpgkey=https://download.copr.fedorainfracloud.org/results/cyberpear/openshift-4.3.1/pubkey.gpg
+repo_gpgcheck=0
+enabled=1
+enabled_metadata=1
+
