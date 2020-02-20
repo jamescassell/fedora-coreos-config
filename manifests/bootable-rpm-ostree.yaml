@@ -10,6 +10,7 @@ packages:
  - kernel kernel-core kernel-modules systemd
  # rpm-ostree
  - rpm-ostree nss-altfiles
+ - selinux-policy-targeted
 
 # bootloader
 packages-aarch64:

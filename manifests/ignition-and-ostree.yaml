@@ -4,6 +4,8 @@
 # It may be used as an inheritance base by other projects like Fedora Silverblue or RHCOS.
 # One good model is to add feodra-coreos-config as a git submodule.  See:
 # https://github.com/coreos/coreos-assembler/pull/639
+#
+automatic-version-prefix: "${releasever}.<date:%Y%m%d>.dev"
 
 # Include rpm-ostree + kernel + bootloader
 include: bootable-rpm-ostree.yaml
@@ -12,12 +14,16 @@ include: bootable-rpm-ostree.yaml
 boot-location: modules
 tmp-is-dir: true
 
+# Be minimal
+recommends: false
+
 # Required by Ignition, and makes the system not compatible with Anaconda
 machineid-compat: false
 
 packages:
   - ignition
   - dracut-network
+  - setup
 
 remove-from-packages:
   # We don't want systemd-firstboot.service. It conceptually conflicts with
